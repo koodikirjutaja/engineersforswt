@@ -5,7 +5,7 @@
 4. Rasmus Meos
 
 ## Homework 1:
-<When you finish your homework, add a link pointing to the solution here (for example, a link to a page on the wiki)> 
+https://bitbucket.org/team-engineers-pos/lg11-engineers/wiki/Home
 
 ## Homework 2:
 <Links to the solution>
