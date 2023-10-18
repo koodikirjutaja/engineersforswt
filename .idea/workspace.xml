@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d46eeffa-e34a-4468-b58c-6edb7244079c" name="Changes" comment="" />
+    <list default="true" id="261c4915-c73a-4b5f-961f-4ebc5f717841" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,13 +20,10 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
-        <task path="$PROJECT_DIR$/SaleSystemCLI">
+        <task path="$PROJECT_DIR$">
           <activation />
         </task>
         <task path="$PROJECT_DIR$/SaleSystemGUI">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$">
           <activation />
         </task>
         <projects_view>
@@ -42,34 +41,34 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 3
+  &quot;associatedIndex&quot;: 7
 }</component>
-  <component name="ProjectId" id="2WIjV8DKPZow5SrSlgCxk5pQ8qp" />
+  <component name="ProjectId" id="2WvlF3PTVSvroD1DZYuylQwnpGX" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/Martin/Desktop/lg-engineers11/lg11-engineers",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "android.project.structure",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Martin/Desktop/lg-engineers11/lg11-engineers&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Gradle.lg11-engineers:SaleSystemGUI [run]">
-    <configuration name="lg11-engineers [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+}</component>
+  <component name="RunManager" selected="Gradle.Team-Engineers:SaleSystemGUI [run]">
+    <configuration name="Team-Engineers [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -91,7 +90,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="lg11-engineers:SaleSystemGUI [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Team-Engineers:SaleSystemGUI [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/SaleSystemGUI" />
@@ -115,36 +114,26 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.lg11-engineers:SaleSystemGUI [run]" />
-        <item itemvalue="Gradle.lg11-engineers [run]" />
+        <item itemvalue="Gradle.Team-Engineers:SaleSystemGUI [run]" />
+        <item itemvalue="Gradle.Team-Engineers [run]" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="d46eeffa-e34a-4468-b58c-6edb7244079c" name="Changes" comment="" />
-      <created>1696427009757</created>
+      <changelist id="261c4915-c73a-4b5f-961f-4ebc5f717841" name="Changes" comment="" />
+      <created>1697620827630</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1696427009757</updated>
-      <workItem from="1696427011047" duration="2156000" />
-      <workItem from="1696772298423" duration="329000" />
-      <workItem from="1696772636828" duration="1545000" />
-      <workItem from="1696930410433" duration="4394000" />
-      <workItem from="1697620561656" duration="106000" />
-      <workItem from="1697620686811" duration="107000" />
-      <workItem from="1697620811142" duration="17000" />
-      <workItem from="1697623132815" duration="250000" />
-      <workItem from="1697623574100" duration="622000" />
+      <updated>1697620827630</updated>
+      <workItem from="1697620828631" duration="2223000" />
+      <workItem from="1697623085646" duration="16000" />
+      <workItem from="1697623385781" duration="187000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
 </project>

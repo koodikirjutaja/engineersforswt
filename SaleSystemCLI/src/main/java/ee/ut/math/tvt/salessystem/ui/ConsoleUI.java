@@ -11,9 +11,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Properties;
 
 /**
  * A simple CLI (limited functionality).
@@ -74,6 +76,25 @@ public class ConsoleUI {
         System.out.println("-------------------------");
     }
 
+    private void showTeamInfo() {
+        Properties prop = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+            if (input == null) {
+                System.out.println("Sorry, unable to find application.properties");
+                return;
+            }
+            prop.load(input);
+            System.out.println("-------------------------");
+            System.out.println("Team Name: " + prop.getProperty("team.name"));
+            System.out.println("Team Contact: " + prop.getProperty("team.contact"));
+            System.out.println("Team Members: " + prop.getProperty("team.members"));
+            System.out.println("-------------------------");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
     private void printUsage() {
         System.out.println("-------------------------");
         System.out.println("Usage:");
@@ -83,6 +104,7 @@ public class ConsoleUI {
         System.out.println("a IDX NR \tAdd NR of stock item with index IDX to the cart");
         System.out.println("p\t\tPurchase the shopping cart");
         System.out.println("r\t\tReset the shopping cart");
+        System.out.println("t\t\tShow team info");
         System.out.println("-------------------------");
     }
 
@@ -101,6 +123,8 @@ public class ConsoleUI {
             cart.submitCurrentPurchase();
         else if (c[0].equals("r"))
             cart.cancelCurrentPurchase();
+        else if (c[0].equals("t"))
+            showTeamInfo();
         else if (c[0].equals("a") && c.length == 3) {
             try {
                 long idx = Long.parseLong(c[1]);
@@ -118,5 +142,7 @@ public class ConsoleUI {
             System.out.println("unknown command");
         }
     }
+
+
 
 }
