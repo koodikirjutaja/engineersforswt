@@ -1,8 +1,9 @@
 # Team Engineers:
-1. Sandor Vunk 
-2. Merili Pihlak
+1. Sandor Vunk muutus j'lle 
+2. Merili Pihlak 
+this is another change
 3. Martin Kõnnussaar
-4. Rasmus Meos 
+4. Rasmus Meos mingi psk
 
 ## Homework 1:
 https://bitbucket.org/team-engineers-pos/lg11-engineers/wiki/Home
