@@ -1,14 +1,39 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+
+<!--<?import java.lang.*?>-->
+<!--<?import java.util.*?>-->
+<!--<?import javafx.scene.*?>-->
+<!--<?import javafx.scene.control.*?>-->
+<!--<?import javafx.scene.layout.*?>-->
+
+<!--<AnchorPane xmlns="http://javafx.com/javafx"-->
+<!--            xmlns:fx="http://javafx.com/fxml"-->
+<!--            fx:controller="ee.ut.math.tvt.salessystem.ui.HistoryTab"-->
+<!--            prefHeight="400.0" prefWidth="600.0">-->
+
+<!--</AnchorPane>-->
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ee.ut.math.tvt.salessystem.ui.HistoryTab"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="ee.ut.math.tvt.salessystem.ui.controllers.HistoryController">
+    <HBox spacing="10">
+        <Label text="Start Date:" />
+        <DatePicker fx:id="dpStartDate" />
+        <Label text="End Date:" />
+        <DatePicker fx:id="dpEndDate" />
+        <Button fx:id="btnShowBetweenDates" text="Show Between Dates" onAction="#showBetweenDatesButtonClicked" />
+        <Button fx:id="btnShowLast10" text="Show Last 10" onAction="#showLast10ButtonClicked" />
+        <Button fx:id="btnShowAll" text="Show All" onAction="#showAllButtonClicked" />
+    </HBox>
 
-</AnchorPane>
+    <TableView fx:id="historyTableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="Date" />
+            <TableColumn text="Item" />
+            <TableColumn text="Amount" />
+            <TableColumn text="Total Price" />
+        </columns>
+    </TableView>
+</VBox>
