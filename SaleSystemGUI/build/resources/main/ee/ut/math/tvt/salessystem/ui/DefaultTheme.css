@@ -841,3 +841,21 @@
     -fx-opacity: .4;
      
 }
+.purchase-history-header {
+    -fx-background-color: gray;
+}
+
+
+
+.history-table .table-row-cell {
+    -fx-background-color: white;
+}
+.history-table .table-row-cell:nth-child(even) {
+    -fx-background-color: lightgray;
+}
+
+
+
+
+
+
