@@ -31,8 +31,10 @@ public interface SalesSystemDAO {
     List<StockItem> findStockItems();
 
     StockItem findStockItem(long id);
+    StockItem findStockItem(String name);
 
     void saveStockItem(StockItem stockItem);
+    void setStockItem(long id, String name, String description, double price, int quantity);
 
     void saveSoldItem(SoldItem item);
 
