@@ -12,7 +12,7 @@ https://bitbucket.org/team-engineers-pos/lg11-engineers/wiki/Home
 https://bitbucket.org/team-engineers-pos/lg11-engineers/wiki/Home
 
 ## Homework 3:
-<Links to the solution>
+https://bitbucket.org/team-engineers-pos/lg11-engineers/src/master/
 
 ## Homework 4:
 <Links to the solution>
