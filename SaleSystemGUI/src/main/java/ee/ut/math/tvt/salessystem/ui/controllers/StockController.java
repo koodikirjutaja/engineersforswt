@@ -120,12 +120,14 @@ public class StockController implements Initializable {
     }
 
     private void getNewQuantity(StockItem stockItem) {
-        if (!itemQuantityField.getText().matches("[0-9]+(\\.[0-9]+){0,1}"))
+        if (!itemQuantityField.getText().matches("-?[0-9]+")) // luba negatiivsed arvud
             throw new NumberFormatException("Not a number");
-        itemQuantity = stockItem.getQuantity() + Integer.parseInt(itemQuantityField.getText());
+        int changeInQuantity = Integer.parseInt(itemQuantityField.getText());
+        itemQuantity = stockItem.getQuantity() + changeInQuantity;
         if (itemQuantity < 0)
             throw new IllegalArgumentException("Item quantity must not be negative");
     }
+
 
     private void getNewDescription() {
         itemDescription = itemDescriptionField.getText();
