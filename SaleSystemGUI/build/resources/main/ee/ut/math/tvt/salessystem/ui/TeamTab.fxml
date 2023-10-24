@@ -1,40 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="15.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <!-- Team name -->
-        <Text fx:id="teamName" text="Team Engineers">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Text>
-
-        <!-- Contact person -->
-        <Text fx:id="teamContact" text="Merili Pihlak">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Text>
-
-        <!-- Team members -->
-        <Text fx:id="teamMembers" text="Merili Pihlak, Sandor Vunk, Martin Kõnnussaar, Rasmus Meos">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Text>
-
-        <!-- Team logo -->
-        <ImageView fx:id="teamLogo" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="https://i0.wp.com/academiamag.com/wp-content/uploads/2022/09/code-ga83c0362b_640.jpg?w=640&amp;ssl=1"/>
-        </ImageView>
-    </children>
+<GridPane hgap="20" vgap="15" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-</VBox>
 
+    <!-- Title -->
+    <Text text="Team info" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" style="-fx-font-size: 24; -fx-underline: true;"/>
+
+    <!-- Team name label -->
+    <Text text="Team name" GridPane.columnIndex="0" GridPane.rowIndex="1">
+        <font>
+            <Font size="18.0" />
+        </font>
+    </Text>
+    <!-- Team name -->
+    <Text fx:id="teamName" text="Team Engineers" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <font>
+            <Font size="18.0" />
+        </font>
+    </Text>
+
+    <!-- Team leader label -->
+    <Text text="Team leader" GridPane.columnIndex="0" GridPane.rowIndex="2">
+        <font>
+            <Font size="18.0" />
+        </font>
+    </Text>
+    <!-- Team leader -->
+    <Text fx:id="teamContact" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <font>
+            <Font size="18.0" />
+        </font>
+    </Text>
+
+    <!-- Team members label -->
+    <Text text="Team members" GridPane.columnIndex="0" GridPane.rowIndex="3">
+        <font>
+            <Font size="18.0" />
+        </font>
+    </Text>
+    <!-- Team members -->
+    <Text fx:id="teamMembers" text="Merili Pihlak, Sandor Vunk, Martin Kõnnussaar, Rasmus Meos" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <font>
+            <Font size="16.0" />
+        </font>
+    </Text>
+
+    <!-- Team logo -->
+    <ImageView fx:id="teamLogo" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="3">
+        <Image url="@/team_logo.jpg"/>
+        <GridPane.margin>
+            <Insets left="80" />
+        </GridPane.margin>
+    </ImageView>
+</GridPane>

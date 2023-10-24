@@ -41,7 +41,7 @@ public class TeamTabController implements Initializable {
             prop.load(input);
             teamName.setText(prop.getProperty("team.name"));
             teamContact.setText(prop.getProperty("team.contact"));
-            teamMembers.setText(prop.getProperty("team.members"));
+            teamMembers.setText(String.join("\n", prop.getProperty("team.members").split(", ")));
             Image image = new Image(prop.getProperty("team.logo.path"));
             teamLogo.setImage(image);
         } catch (IOException ex) {
