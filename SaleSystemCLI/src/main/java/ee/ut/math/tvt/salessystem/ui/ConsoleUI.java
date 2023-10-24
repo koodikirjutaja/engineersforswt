@@ -64,7 +64,26 @@ public class ConsoleUI {
         }
         System.out.println("-------------------------");
     }
-
+    private void addItem() {
+        List<StockItem> stockItems = dao.findStockItems();
+        long id = stockItems.size();
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        try{
+        System.out.println("Item name:");
+        String name = input.readLine();
+        System.out.println("Item quantity:");
+        int quantity = Integer.parseInt(input.readLine());
+        System.out.println("Item price:");
+        Double price = Double.parseDouble(input.readLine());
+        System.out.println("Description:");
+        String description = input.readLine();
+        System.out.println(name+" "+quantity+" "+price +" "+ description);
+        dao.saveStockItem(new StockItem(id, name, description,price, quantity));
+        }
+        catch (IOException ex){
+            ex.printStackTrace();
+        }
+    }
     private void showCart() {
         System.out.println("-------------------------");
         for (SoldItem si : cart.getAll()) {
@@ -100,6 +119,7 @@ public class ConsoleUI {
         System.out.println("Usage:");
         System.out.println("h\t\tShow this help");
         System.out.println("w\t\tShow warehouse contents");
+        System.out.println("s\t\tAdd item new item to warehouse");
         System.out.println("c\t\tShow cart contents");
         System.out.println("a IDX NR \tAdd NR of stock item with index IDX to the cart");
         System.out.println("p\t\tPurchase the shopping cart");
@@ -125,6 +145,8 @@ public class ConsoleUI {
             cart.cancelCurrentPurchase();
         else if (c[0].equals("t"))
             showTeamInfo();
+        else if (c[0].equals("s"))
+            addItem();
         else if (c[0].equals("a") && c.length == 3) {
             try {
                 long idx = Long.parseLong(c[1]);
