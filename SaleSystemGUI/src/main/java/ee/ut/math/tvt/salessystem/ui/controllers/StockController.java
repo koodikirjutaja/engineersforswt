@@ -81,7 +81,7 @@ public class StockController implements Initializable {
     }
 
     public void addNewItem() {
-        long barCode = dao.findStockItems().size();
+        long barCode = dao.findStockItems().size()+1;
         itemName = itemNameField.getText();
         if (itemName.equals(""))
             throw new IllegalArgumentException("Item must have a name!");

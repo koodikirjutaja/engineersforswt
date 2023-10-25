@@ -66,7 +66,7 @@ public class ConsoleUI {
     }
     private void addItem() {
         List<StockItem> stockItems = dao.findStockItems();
-        long id = stockItems.size();
+        long id = stockItems.size()+1;
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         try{
         System.out.println("Item name:");
@@ -77,7 +77,6 @@ public class ConsoleUI {
         Double price = Double.parseDouble(input.readLine());
         System.out.println("Description:");
         String description = input.readLine();
-        System.out.println(name+" "+quantity+" "+price +" "+ description);
         dao.saveStockItem(new StockItem(id, name, description,price, quantity));
         }
         catch (IOException ex){
