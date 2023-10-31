@@ -1,5 +1,6 @@
 package ee.ut.math.tvt.salessystem.dao;
 
+import ee.ut.math.tvt.salessystem.FieldFormatException;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
@@ -61,6 +62,113 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         stockItem.setDescription(description);
         stockItem.setQuantity(quantity);
         stockItem.setPrice(price);
+    }
+
+    @Override
+    public void setStockItem(StockItem stockItem, String name, String description, double price, int quantity) {
+        stockItem.setName(name);
+        stockItem.setDescription(description);
+        stockItem.setQuantity(quantity);
+        stockItem.setPrice(price);
+    }
+
+    @Override
+    public void addStockItem(String itemName,
+                             String itemDescription,
+                             String itemPriceStr,
+                             String itemQuantityStr) {
+        if (itemName.equals(""))
+            throw new FieldFormatException("Item must have a name!");
+        StockItem stockItem = findStockItem(itemName);
+        if (stockItem != null) {
+            addExistingStockItem(stockItem, itemName, itemDescription, itemPriceStr, itemQuantityStr);
+        }
+        else {
+            addNewStockItem(itemName, itemDescription, itemPriceStr, itemQuantityStr);
+        }
+    }
+    @Override
+    public void addExistingStockItem(StockItem stockItem,
+                                     String itemName,
+                                     String itemDescription,
+                                     String itemPriceStr,
+                                     String itemQuantityStr) {
+        double itemPrice;
+        int itemQuantity;
+        if (itemPriceStr.equals("")) {
+            itemPrice = stockItem.getPrice();
+        } else {
+            itemPrice = getPriceFromString(itemPriceStr);
+        }
+        if (itemQuantityStr.equals("")) {
+            itemQuantity = stockItem.getQuantity();
+        } else {
+            itemQuantity = getNewStockItemQuantity(
+                    stockItem,
+                    getQuantityFromString(itemQuantityStr)
+            );
+        }
+        if (itemDescription.equals("")) {
+            itemDescription = stockItem.getDescription();
+        }
+        setStockItem(stockItem, itemName, itemDescription, itemPrice, itemQuantity);
+    }
+    @Override
+    public void addNewStockItem(String itemName,
+                                String itemDescription,
+                                String itemPriceStr,
+                                String itemQuantityStr){
+        long barCode = findStockItems().size()+1;
+        checkInputFields(itemName,
+                        itemDescription,
+                        itemPriceStr,
+                        itemQuantityStr);
+        double itemPrice = Double.parseDouble(itemPriceStr);
+        int itemQuantity = Integer.parseInt(itemQuantityStr);
+        if (itemPrice < 0)
+            throw new FieldFormatException("Item price must not be negative");
+        if (itemQuantity < 0)
+            throw new FieldFormatException("Item quantity must not be negative");
+        StockItem stockItem = new StockItem(barCode, itemName, itemDescription, itemPrice, itemQuantity);
+        saveStockItem(stockItem);
+    }
+    @Override
+    public void checkInputFields(String itemName,
+                                 String itemDescription,
+                                 String itemPriceStr,
+                                 String itemQuantityStr) {
+        if (itemName.equals(""))
+            throw new FieldFormatException("Item must have a name!");
+        if (itemDescription.equals(""))
+            throw new FieldFormatException("Item must have a description!");
+        if (!itemPriceStr.matches("[0-9]+(\\.[0-9]+){0,1}"))
+            throw new FieldFormatException("Item price is not a number");
+        if (!itemQuantityStr.matches("[0-9]+(\\.[0-9]+){0,1}"))
+            throw new FieldFormatException("Item quantity is not a number");
+    }
+
+    @Override
+    public double getPriceFromString(String itemPriceStr) {
+        if (!itemPriceStr.matches("[0-9]+(\\.[0-9]+){0,1}"))
+            throw new FieldFormatException("Not a number");
+        double itemPrice = Double.parseDouble(itemPriceStr);
+        if (itemPrice < 0)
+            throw new FieldFormatException("Item price must not be negative");
+        return itemPrice;
+    }
+    @Override
+    public int getNewStockItemQuantity(StockItem stockItem, int changeInQuantity) {
+        int itemQuantity = stockItem.getQuantity() + changeInQuantity;
+        if (itemQuantity < 0)
+            throw new FieldFormatException("Item quantity must not be negative");
+        return itemQuantity;
+    }
+    @Override
+    public int getQuantityFromString(String itemQuantityStr) {
+        if (!itemQuantityStr.matches("-?[0-9]+")) // luba negatiivsed arvud
+            throw new FieldFormatException("Not a number");
+        int changeInQuantity = Integer.parseInt(itemQuantityStr);
+        return changeInQuantity;
     }
 
     @Override

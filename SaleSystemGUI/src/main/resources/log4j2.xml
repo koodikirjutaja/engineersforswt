@@ -13,4 +13,20 @@
     <logger name="Ratpack" level="info">
     </logger>
   </Loggers>
+  <Loggers>
+    <Root level="debug">
+      <AppenderRef ref="Console"/>
+    </Root>
+
+    <logger name="Ratpack" level="debug">
+    </logger>
+  </Loggers>
+  <Loggers>
+    <Root level="debug">
+      <AppenderRef ref="Console"/>
+    </Root>
+
+    <logger name="Ratpack" level="debug">
+    </logger>
+  </Loggers>
 </Configuration>

@@ -52,30 +52,37 @@ public class HistoryController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        log.debug("HistoryController-initialize");
         // Initialization logic here.
         // For example, you might want to load all history items by default.
         loadAllHistoryItems();
+        log.debug("HistoryController-initialize-loadAllHistoryItems");
     }
 
     @FXML
     protected void showBetweenDatesButtonClicked() {
+        log.debug("HistoryController-showBetweenDatesButtonClicked");
         log.info("Showing history between selected dates");
         // Implement logic to filter and display history items between the selected dates
     }
 
     @FXML
     protected void showLast10ButtonClicked() {
+        log.debug("HistoryController-showLast10ButtonClicked");
         log.info("Showing last 10 history items");
         // Implement logic to display the last 10 history items
     }
 
     @FXML
     protected void showAllButtonClicked() {
+        log.debug("HistoryController-showAllButtonClicked");
         log.info("Showing all history items");
         loadAllHistoryItems();
+        log.debug("HistoryController-showAllButtonClicked-loadAllHistoryItems");
     }
 
     private void loadAllHistoryItems() {
+        log.debug("HistoryController-loadAllHistoryItems");
         // Implement logic to fetch and display all history items.
         // historyTableView.setItems( ... );
     }

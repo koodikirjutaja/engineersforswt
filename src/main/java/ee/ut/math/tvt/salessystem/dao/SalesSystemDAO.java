@@ -34,7 +34,40 @@ public interface SalesSystemDAO {
     StockItem findStockItem(String name);
 
     void saveStockItem(StockItem stockItem);
-    void setStockItem(long id, String name, String description, double price, int quantity);
+    void setStockItem(long id,
+                      String name,
+                      String description,
+                      double price,
+                      int quantity);
+
+    void setStockItem(StockItem stockItem,
+                      String name,
+                      String description,
+                      double price,
+                      int quantity);
+
+
+    void addStockItem(String itemName,
+                      String itemDescription,
+                      String itemPriceStr,
+                      String itemQuantityStr);
+
+    void addExistingStockItem(StockItem stockItem,
+                              String itemName,
+                              String itemDescription,
+                              String itemPriceStr,
+                              String itemQuantityStr);
+    void addNewStockItem(String itemName,
+                         String itemDescription,
+                         String itemPriceStr,
+                         String itemQuantityStr);
+    void checkInputFields(String itemName,
+                          String itemDescription,
+                          String itemPriceStr,
+                          String itemQuantityStr);
+    double getPriceFromString(String itemPriceStr);
+    int getNewStockItemQuantity(StockItem stockItem, int changeInQuantity);
+    int getQuantityFromString(String itemQuantityStr);
 
     void saveSoldItem(SoldItem item);
 

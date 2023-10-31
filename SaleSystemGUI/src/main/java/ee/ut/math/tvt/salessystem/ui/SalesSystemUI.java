@@ -43,26 +43,35 @@ public class SalesSystemUI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         log.info("javafx version: " + System.getProperty("javafx.runtime.version"));
+        log.info("SalesSystemUI: Starting");
 
+        log.info("Creating Point-of-sale tab");
         Tab purchaseTab = new Tab();
         purchaseTab.setText("Point-of-sale");
         purchaseTab.setClosable(false);
         purchaseTab.setContent(loadControls("PurchaseTab.fxml", new PurchaseController(dao, shoppingCart)));
+        log.info("Created Point-of-sale tab");
 
+        log.info("Creating Warehouse tab");
         Tab stockTab = new Tab();
         stockTab.setText("Warehouse");
         stockTab.setClosable(false);
         stockTab.setContent(loadControls("StockTab.fxml", new StockController(dao)));
+        log.info("Created Warehouse tab");
 
+        log.info("Creating History tab");
         Tab historyTab = new Tab();
         historyTab.setText("History");
         historyTab.setClosable(false);
         historyTab.setContent(loadControls("HistoryTab.fxml", new HistoryController(dao)));
+        log.info("Created History tab");
 
+        log.info("Creating Team tab");
         Tab teamTab = new Tab();
         teamTab.setText("Team");
         teamTab.setClosable(false);
         teamTab.setContent(loadControls("TeamTab.fxml", new TeamTabController()));
+        log.info("Created Team tab");
 
 
         Group root = new Group();

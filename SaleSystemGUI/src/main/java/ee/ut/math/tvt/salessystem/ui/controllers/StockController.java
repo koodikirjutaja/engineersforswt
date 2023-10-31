@@ -1,6 +1,7 @@
 package ee.ut.math.tvt.salessystem.ui.controllers;
 
 import com.sun.javafx.collections.ObservableListWrapper;
+import ee.ut.math.tvt.salessystem.FieldFormatException;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import javafx.collections.FXCollections;
@@ -10,17 +11,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class StockController implements Initializable {
 
+    private static final Logger log = LogManager.getLogger(StockController.class);
+
     private final SalesSystemDAO dao;
-    String itemName;
-    String itemDescription;
-    int itemQuantity;
-    double itemPrice;
+
     @FXML
     private Button addItem;
     @FXML
@@ -36,7 +38,11 @@ public class StockController implements Initializable {
     private TextField itemPriceField;
     @FXML
     public void onAddItemClicked(){
+        log.info("Started add item process");
+        log.debug("StockController-onAddItemClicked");
         addItem();
+        log.debug("StockController-onAddItemClicked-addItem");
+        log.info("Ended add item process");
     };
     public StockController(SalesSystemDAO dao) {
         this.dao = dao;
@@ -44,102 +50,50 @@ public class StockController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        log.info("StockController Initializing");
+        log.debug("StockController-initialize");
         refreshStockItems();
+        log.debug("StockController-initialize-refreshStockItems");
         // TODO refresh view after adding new items
+        log.info("StockController Initialized");
     }
     public void addItem(){
-        if (itemNameField.getText().equals(""))
-            throw new IllegalArgumentException("Item must have a name!");
-        StockItem stockItem = dao.findStockItem(itemNameField.getText());
-        if (stockItem != null) {
-            addExistingItem(stockItem);
+        log.debug("StockController-addItem");
+        try {
+            dao.addStockItem(
+                    itemNameField.getText(),
+                    itemDescriptionField.getText(),
+                    itemPriceField.getText(),
+                    itemQuantityField.getText()
+            );
+            log.debug("StockController-addItem-addStockItem: " +
+                    itemNameField.getText() + ", " +
+                    itemDescriptionField.getText() + ", " +
+                    itemPriceField.getText() + ", " +
+                    itemQuantityField.getText());
+            refreshStockItems();
+            log.debug("StockController-addItem-refreshStockItems");
+        } catch (FieldFormatException e) {
+            log.error("StockController-addItem-FieldFormatException: " + e.getMessage(), e);
+            // Popup message
+        } catch (Exception e) {
+            log.error("StockController-addItem-Exception: " + e.getMessage(), e);
         }
-        else {
-            addNewItem();
-        }
     }
-
-    public void addExistingItem(StockItem stockItem) {
-        itemName = itemNameField.getText();
-        if (itemPriceField.getText().equals("")) {
-            itemPrice = stockItem.getPrice();
-        } else {
-            getNewPrice();
-        }
-        if (itemQuantityField.getText().equals("")) {
-            itemQuantity = stockItem.getQuantity();
-        } else {
-            getNewQuantity(stockItem);
-        }
-        if (itemDescriptionField.getText().equals("")) {
-            itemDescription = stockItem.getDescription();
-        } else {
-            getNewDescription();
-        }
-        setStockItem(stockItem);
-        refreshStockItems();
-    }
-
-    public void addNewItem() {
-        long barCode = dao.findStockItems().size()+1;
-        itemName = itemNameField.getText();
-        if (itemName.equals(""))
-            throw new IllegalArgumentException("Item must have a name!");
-        itemDescription = itemDescriptionField.getText();
-        if (itemDescription.equals(""))
-            throw new IllegalArgumentException("Item must have a description!");
-        if (!itemPriceField.getText().matches("[0-9]+(\\.[0-9]+){0,1}"))
-            throw new NumberFormatException("Not a number");
-        if (!itemQuantityField.getText().matches("[0-9]+(\\.[0-9]+){0,1}"))
-            throw new NumberFormatException("Not a number");
-        itemPrice = Double.parseDouble(itemPriceField.getText());
-        itemQuantity = Integer.parseInt(itemQuantityField.getText());
-        if (itemPrice < 0)
-            throw new IllegalArgumentException("Item price must not be negative");
-        if (itemQuantity < 0)
-            throw new IllegalArgumentException("Item quantity must not be negative");
-        StockItem stockItem = new StockItem(barCode, itemName, itemDescription, itemPrice, itemQuantity);
-        dao.saveStockItem(stockItem);
-        refreshStockItems();
-    }
-
-    private void setStockItem(StockItem stockItem) {
-        dao.setStockItem(stockItem.getId(), itemName, itemDescription, itemPrice, itemQuantity);
-        stockItem.setName(itemName);
-        stockItem.setDescription(itemDescription);
-        stockItem.setPrice(itemPrice);
-        stockItem.setQuantity(itemQuantity);
-    }
-
-    private void getNewPrice() {
-        if (!itemPriceField.getText().matches("[0-9]+(\\.[0-9]+){0,1}"))
-            throw new NumberFormatException("Not a number");
-        itemPrice = Double.parseDouble(itemPriceField.getText());
-        if (itemPrice < 0)
-            throw new IllegalArgumentException("Item price must not be negative");
-    }
-
-    private void getNewQuantity(StockItem stockItem) {
-        if (!itemQuantityField.getText().matches("-?[0-9]+")) // luba negatiivsed arvud
-            throw new NumberFormatException("Not a number");
-        int changeInQuantity = Integer.parseInt(itemQuantityField.getText());
-        itemQuantity = stockItem.getQuantity() + changeInQuantity;
-        if (itemQuantity < 0)
-            throw new IllegalArgumentException("Item quantity must not be negative");
-    }
-
-
-    private void getNewDescription() {
-        itemDescription = itemDescriptionField.getText();
-    }
-
     @FXML
     public void refreshButtonClicked() {
+        log.info("Refreshing stock items.");
+        log.debug("StockController-refreshButtonClicked");
         refreshStockItems();
+        log.debug("StockController-refreshButtonClicked-refreshStockItems");
+        log.info("Refreshing stock items.");
     }
 
     private void refreshStockItems() {
+        log.debug("StockController-refreshStockItems");
         warehouseTableView.setItems(FXCollections.observableList(dao.findStockItems()));
+        log.debug("StockController-refreshStockItems-setItems");
         warehouseTableView.refresh();
+        log.debug("StockController-refreshStockItems-refresh");
     }
 }
