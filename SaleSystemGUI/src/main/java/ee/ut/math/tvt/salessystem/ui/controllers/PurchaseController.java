@@ -57,42 +57,45 @@ public class PurchaseController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        log.info("PurchaseController initializing");
-        log.debug("PurchaseController-initialize");
-        cancelPurchase.setDisable(true);
-        log.debug("PurchaseController-initialize-cancelPurchase-setDisable: true");
-        submitPurchase.setDisable(true);
-        log.debug("PurchaseController-initialize-submitPurchase-setDisable: true");
-        purchaseTableView.setItems(FXCollections.observableList(shoppingCart.getAll()));
-        log.debug("PurchaseController-initialize-setItems");
-        disableProductField(true);
-        log.debug("PurchaseController-initialize-disableProductField: true");
+        log.info("Initializing PurchaseController");
 
+        // Disabling 'cancel' and 'submit' buttons initially
+        cancelPurchase.setDisable(true);
+        submitPurchase.setDisable(true);
+        log.debug("Cancel and Submit buttons disabled");
+
+        // Setting items in the purchase table view from the shopping cart
+        purchaseTableView.setItems(FXCollections.observableList(shoppingCart.getAll()));
+        log.debug("Purchase table view initialized with items from shopping cart");
+
+        // Disabling product input fields initially
+        disableProductField(true);
+        log.debug("Product input fields disabled");
+
+        // Setting up listener for bar code field to update item details on focus loss
         this.barCodeField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) {
                 if (!newPropertyValue) {
-                    log.debug("PurchaseController-initialize-changed");
+                    log.debug("Bar code field focus lost, updating item details");
                     fillInputsBySelectedStockItem();
-                    log.debug("PurchaseController-initialize-changed-fillInputsBySelectedStockItem");
                 }
             }
         });
-        log.info("PurchaseController initialized");
+
+        log.info("PurchaseController initialization complete");
     }
 
     /** Event handler for the <code>new purchase</code> event. */
     @FXML
     protected void newPurchaseButtonClicked() {
-        log.info("New sale process started");
-        log.debug("PurchaseController-newPurchaseButtonClicked");
+        log.info("Initiating new sale process");
         try {
             enableInputs();
-            log.debug("PurchaseController-enableInputs");
         } catch (SalesSystemException e) {
-            log.error(e.getMessage(), e);
+            log.error("Error encountered during new sale process: " + e.getMessage(), e);
         }
-        log.info("New sale process ended");
+        log.info("New sale process ready");
     }
 
     /**
@@ -100,17 +103,14 @@ public class PurchaseController implements Initializable {
      */
     @FXML
     protected void cancelPurchaseButtonClicked() {
-        log.info("Sale cancelled");
-        log.debug("PurchaseController-cancelPurchaseButtonClicked");
+        log.info("Cancelling sale process");
         try {
             shoppingCart.cancelCurrentPurchase();
-            log.debug("PurchaseController-cancelPurchaseButtonClicked-cancelCurrentPurchase");
             disableInputs();
-            log.debug("PurchaseController-cancelPurchaseButtonClicked-disableInputs");
             purchaseTableView.refresh();
-            log.debug("PurchaseController-cancelPurchaseButtonClicked-refresh");
+            log.debug("Sale process cancelled and UI elements reset");
         } catch (SalesSystemException e) {
-            log.error(e.getMessage(), e);
+            log.error("Error cancelling sale: " + e.getMessage(), e);
         }
     }
 
@@ -120,7 +120,6 @@ public class PurchaseController implements Initializable {
     @FXML
     protected void submitPurchaseButtonClicked() {
         log.info("Sale complete");
-        log.debug("PurchaseController-submitPurchaseButtonClicked");
         try {
             log.debug("Contents of the current basket:\n" + shoppingCart.getAll());
             shoppingCart.submitCurrentPurchase();
@@ -133,53 +132,50 @@ public class PurchaseController implements Initializable {
 
     // switch UI to the state that allows to proceed with the purchase
     private void enableInputs() {
-        log.debug("PurchaseController: Enabling inputs");
+        log.debug("PurchaseController: Enabling inputs and resetting product fields");
         resetProductField();
         disableProductField(false);
         cancelPurchase.setDisable(false);
         submitPurchase.setDisable(false);
         newPurchase.setDisable(true);
-        log.debug("PurchaseController: Enabled inputs");
     }
 
     // switch UI to the state that allows to initiate new purchase
     private void disableInputs() {
-        log.debug("PurchaseController: Disabling inputs");
+        log.debug("PurchaseController: Disabling inputs and resetting product fields");
         resetProductField();
         cancelPurchase.setDisable(true);
         submitPurchase.setDisable(true);
         newPurchase.setDisable(false);
         disableProductField(true);
-        log.debug("PurchaseController: Disabled inputs");
     }
 
     private void fillInputsBySelectedStockItem() {
-        log.info("Filling info by selected stock item");
-        log.debug("PurchaseController-fillInputsBySelectedStockItem");
+        log.debug("Filling info by selected stock item");
         StockItem stockItem = getStockItemByBarcode();
-        log.debug("PurchaseController-fillInputsBySelectedStockItem-getStockItemByBarcode");
         if (stockItem != null) {
             nameField.setText(stockItem.getName());
-            log.debug("PurchaseController-fillInputsBySelectedStockItem-setText");
             priceField.setText(String.valueOf(stockItem.getPrice()));
-            log.debug("PurchaseController-fillInputsBySelectedStockItem-setText");
+            log.debug("Stock item details set - Name: " + stockItem.getName() + ", Price: " + stockItem.getPrice());
         } else {
             resetProductField();
-            log.debug("PurchaseController-fillInputsBySelectedStockItem-resetProductField");
+            log.debug("No stock item found, reset product field");
         }
     }
 
     // Search the warehouse for a StockItem with the bar code entered
     // to the barCode textfield.
     private StockItem getStockItemByBarcode() {
-        log.info("Getting stock item by barcode");
-        log.debug("PurchaseController-getStockItemByBarcode");
+        log.debug("Attempting to get stock item by barcode");
         try {
             long code = Long.parseLong(barCodeField.getText());
-            log.debug("PurchaseController-getStockItemByBarcode: Got code");
-            return dao.findStockItem(code);
+            StockItem item = dao.findStockItem(code);
+            if (item == null) {
+                log.debug("No stock item found for barcode: " + code);
+            }
+            return item;
         } catch (NumberFormatException e) {
-            log.error("PurchaseController-getStockItemByBarcode: " + e.getMessage(), e);
+            log.warn("Invalid barcode format: " + barCodeField.getText(), e);
             return null;
         }
     }
@@ -190,23 +186,21 @@ public class PurchaseController implements Initializable {
     @FXML
     public void addItemEventHandler() {
         log.info("Adding new item to cart");
-        log.debug("PurchaseController-addItemEventHandler");
-        // add chosen item to the shopping cart.
         StockItem stockItem = getStockItemByBarcode();
-        log.debug("PurchaseController-addItemEventHandler-getStockItemByBarcode");
+
         if (stockItem != null) {
             int quantity;
             try {
                 quantity = Integer.parseInt(quantityField.getText());
-                log.debug("PurchaseController-addItemEventHandler: Got quantity");
             } catch (NumberFormatException e) {
+                log.warn("Invalid quantity format for item " + stockItem.getName() + ", defaulting to 1", e);
                 quantity = 1;
-                log.debug("PurchaseController-addItemEventHandler: Quantity = 1");
             }
             shoppingCart.addItem(new SoldItem(stockItem, quantity));
-            log.debug("PurchaseController-addItemEventHandler-addItem");
             purchaseTableView.refresh();
-            log.debug("PurchaseController-addItemEventHandler-refresh");
+            log.info("Item added: " + stockItem.getName() + ", Quantity: " + quantity);
+        } else {
+            log.warn("No stock item found for the entered barcode");
         }
     }
 
@@ -214,24 +208,22 @@ public class PurchaseController implements Initializable {
      * Sets whether or not the product component is enabled.
      */
     private void disableProductField(boolean disable) {
-        log.debug("PurchaseController: Disabling product field");
+        log.debug("PurchaseController: Setting product fields to " + (disable ? "disabled" : "enabled"));
         this.addItemButton.setDisable(disable);
         this.barCodeField.setDisable(disable);
         this.quantityField.setDisable(disable);
         this.nameField.setDisable(disable);
         this.priceField.setDisable(disable);
-        log.debug("PurchaseController: Disabled product field");
     }
 
     /**
      * Reset dialog fields.
      */
     private void resetProductField() {
-        log.debug("PurchaseController: Resetting product field");
+        log.debug("PurchaseController: Resetting product fields to default values");
         barCodeField.setText("");
         quantityField.setText("1");
         nameField.setText("");
         priceField.setText("");
-        log.debug("PurchaseController: Reset product field");
     }
 }

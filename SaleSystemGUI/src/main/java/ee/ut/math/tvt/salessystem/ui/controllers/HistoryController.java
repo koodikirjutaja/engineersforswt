@@ -4,12 +4,12 @@
  * Encapsulates everything that has to do with the purchase tab (the tab
  * labelled "History" in the menu).
  *
-public class HistoryController implements Initializable {
+ public class HistoryController implements Initializable {
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // TODO: implement
-    }
+@Override
+public void initialize(URL location, ResourceBundle resources) {
+// TODO: implement
+}
 } **/
 package ee.ut.math.tvt.salessystem.ui.controllers;
 
