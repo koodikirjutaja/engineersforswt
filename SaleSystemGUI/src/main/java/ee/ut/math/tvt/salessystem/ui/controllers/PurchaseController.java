@@ -267,21 +267,28 @@ public class PurchaseController implements Initializable {
         StockItem stockItem = getStockItemByBarcode();
 
         if (stockItem != null) {
-            int quantity;
             try {
-                quantity = Integer.parseInt(quantityField.getText());
+                int quantity = Integer.parseInt(quantityField.getText());
+                shoppingCart.addItem(new SoldItem(stockItem, quantity));
+                purchaseTableView.refresh();
+                FXCollections.sort(purchaseTableView.getItems(), Comparator.comparing(SoldItem::getQuantity));
+                log.info("Item added: " + stockItem.getName() + ", Quantity: " + quantity);
             } catch (NumberFormatException e) {
-                log.warn("Invalid quantity format for item " + stockItem.getName() + ", defaulting to 1", e);
-                quantity = 1;
-            }
-            shoppingCart.addItem(new SoldItem(stockItem, quantity));
-            purchaseTableView.refresh();
-            FXCollections.sort(purchaseTableView.getItems(), Comparator.comparing(SoldItem::getQuantity));
-            log.info("Item added: " + stockItem.getName() + ", Quantity: " + quantity);
+                showErrorMessage("Invalid quantity format for item " + stockItem.getName());
+                log.warn("Invalid quantity format for item " + stockItem.getName(), e);
+            } catch (IllegalStateException e) {
+                // Display the error message in a popup dialog
+                showErrorMessage(e.getMessage());
+                log.error("Error adding item to cart: " + e.getMessage(), e);
+            } catch (IllegalArgumentException e) {
+                // Display the error message in a popup dialog
+                showErrorMessage(e.getMessage());
+                log.error("Error adding item to cart: " + e.getMessage(), e);}
         } else {
             log.warn("No stock item found for the entered barcode");
         }
     }
+
 
     /**
      * Sets whether or not the product component is enabled.
