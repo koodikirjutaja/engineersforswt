@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.92">
-
   <SplitPane dividerPositions="0.4" orientation="VERTICAL" prefHeight="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
     <items>
       <AnchorPane prefHeight="200.0" styleClass="background_style" SplitPane.resizableWithParent="false">
@@ -31,33 +20,15 @@
             <GridPane prefWidth="214.0" styleClass="sub_background">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="10000.0" minWidth="10.0" prefWidth="50.0" />
-              </columnConstraints>
-              <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="10000.0" minWidth="10.0" prefWidth="50.0" />
-              </columnConstraints>
-              <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="10000.0" minWidth="10.0" prefWidth="50.0" />
-              </columnConstraints>
-              <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="10000.0" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints />
-                        <ColumnConstraints />
-                        <ColumnConstraints />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-              <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-              <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-              <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
               </rowConstraints>
               <children>
                 <Label text="Bar Code:" />
@@ -67,7 +38,7 @@
                 <Button fx:id="addItemButton" alignment="CENTER" mnemonicParsing="false" onAction="#addItemEventHandler" text="Add to cart" GridPane.Halignment="CENTER" GridPane.Valignment="CENTER" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2" />
                 <TextField fx:id="barCodeField" GridPane.columnIndex="1" />
                 <TextField fx:id="quantityField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <ComboBox fx:id="productNameComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
               </children>
             </GridPane>

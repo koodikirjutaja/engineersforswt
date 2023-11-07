@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * Encapsulates everything that has to do with the purchase tab (the tab
@@ -42,7 +44,7 @@ public class PurchaseController implements Initializable {
     @FXML
     private TextField quantityField;
     @FXML
-    private TextField nameField;
+    private ComboBox<String> productNameComboBox;
     @FXML
     private TextField priceField;
     @FXML
@@ -58,6 +60,20 @@ public class PurchaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         log.info("Initializing PurchaseController");
+
+        // Populate the ComboBox with product names
+        productNameComboBox.setItems(FXCollections.observableArrayList(
+                dao.findStockItems().stream()
+                        .filter(item -> item.getQuantity() > 0)
+                        .map(StockItem::getName)
+                        .collect(Collectors.toList())
+        ));
+        productNameComboBox.valueProperty().addListener((obs, oldValue, newValue) -> {
+            // When a product is selected, update the other fields accordingly
+            if (newValue != null) {
+                updateProductDetails(newValue);
+            }
+        });
 
         // Disabling 'cancel' and 'submit' buttons initially
         cancelPurchase.setDisable(true);
@@ -86,6 +102,14 @@ public class PurchaseController implements Initializable {
         log.info("PurchaseController initialization complete");
     }
 
+    private void updateProductDetails(String productName) {
+        StockItem stockItem = dao.findStockItem(productName);
+        if (stockItem != null) {
+            barCodeField.setText(String.valueOf(stockItem.getId()));
+            priceField.setText(String.format("%.2f", stockItem.getPrice()));
+        }
+    }
+
     /** Event handler for the <code>new purchase</code> event. */
     @FXML
     protected void newPurchaseButtonClicked() {
@@ -95,8 +119,20 @@ public class PurchaseController implements Initializable {
         } catch (SalesSystemException e) {
             log.error("Error encountered during new sale process: " + e.getMessage(), e);
         }
+        refreshProductList();
         log.info("New sale process ready");
     }
+
+    private void refreshProductList() {
+        productNameComboBox.setItems(FXCollections.observableArrayList(
+                dao.findStockItems().stream()
+                        .filter(item -> item.getQuantity() > 0)
+                        .map(StockItem::getName)
+                        .collect(Collectors.toList())
+        ));
+    }
+
+
 
     /**
      * Event handler for the <code>cancel purchase</code> event.
@@ -124,6 +160,7 @@ public class PurchaseController implements Initializable {
             log.debug("Contents of the current basket:\n" + shoppingCart.getAll());
             shoppingCart.submitCurrentPurchase();
             disableInputs();
+            refreshProductList();
             purchaseTableView.refresh();
         } catch (SalesSystemException e) {
             log.error(e.getMessage(), e);
@@ -151,15 +188,10 @@ public class PurchaseController implements Initializable {
     }
 
     private void fillInputsBySelectedStockItem() {
-        log.debug("Filling info by selected stock item");
-        StockItem stockItem = getStockItemByBarcode();
+        StockItem stockItem = dao.findStockItem(Long.parseLong(barCodeField.getText()));
         if (stockItem != null) {
-            nameField.setText(stockItem.getName());
-            priceField.setText(String.valueOf(stockItem.getPrice()));
-            log.debug("Stock item details set - Name: " + stockItem.getName() + ", Price: " + stockItem.getPrice());
-        } else {
-            resetProductField();
-            log.debug("No stock item found, reset product field");
+            productNameComboBox.setValue(stockItem.getName());
+            priceField.setText(String.format("%.2f", stockItem.getPrice()));
         }
     }
 
@@ -212,7 +244,7 @@ public class PurchaseController implements Initializable {
         this.addItemButton.setDisable(disable);
         this.barCodeField.setDisable(disable);
         this.quantityField.setDisable(disable);
-        this.nameField.setDisable(disable);
+        this.productNameComboBox.setDisable(disable);
         this.priceField.setDisable(disable);
     }
 
@@ -223,7 +255,7 @@ public class PurchaseController implements Initializable {
         log.debug("PurchaseController: Resetting product fields to default values");
         barCodeField.setText("");
         quantityField.setText("1");
-        nameField.setText("");
+        productNameComboBox.setValue(null);
         priceField.setText("");
     }
 }
