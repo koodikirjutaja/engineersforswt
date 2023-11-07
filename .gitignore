@@ -5,3 +5,5 @@
 .settings
 bin/*
 build/*
+SaleSystemCLI/build/*
+SaleSystemGUI/build/*

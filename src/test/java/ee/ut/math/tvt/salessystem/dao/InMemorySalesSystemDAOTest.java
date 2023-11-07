@@ -9,7 +9,8 @@ import java.sql.SQLOutput;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 
 public class InMemorySalesSystemDAOTest{
@@ -22,6 +23,13 @@ public void setUp(){
 @Test
 public void testAddingItemBeginsAndCommitsTransaction() {
     //TODO make mock class of InMemorySalesSystemDAO, add item to it and verify begin transaction and commit transaction work once.
+    SalesSystemDAO mockdao = mock(InMemorySalesSystemDAO.class);
+    doCallRealMethod().when(mockdao).addNewStockItem("asdf","asdf","1","1");
+    mockdao.addNewStockItem("asdf","asdf","1","1");
+
+    verify(mockdao, times(1)).beginTransaction();
+    verify(mockdao, times(1)).commitTransaction();
+
 }
 @Test
     public void testAddingNewItem(){
