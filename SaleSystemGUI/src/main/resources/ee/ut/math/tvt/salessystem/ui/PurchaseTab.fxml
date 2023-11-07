@@ -77,6 +77,7 @@
             </TableView>
           </content>
         </TitledPane>
+        <Button fx:id="editQuantityButton" text="Edit Quantity" onAction="#editQuantityButtonClicked" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="10.0"/>
       </AnchorPane>
     </items>
   </SplitPane>

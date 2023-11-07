@@ -10,16 +10,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import java.util.Comparator;
+
 
 /**
  * Encapsulates everything that has to do with the purchase tab (the tab
@@ -49,6 +49,8 @@ public class PurchaseController implements Initializable {
     private TextField priceField;
     @FXML
     private Button addItemButton;
+    @FXML
+    private Button editQuantityButton;
     @FXML
     private TableView<SoldItem> purchaseTableView;
 
@@ -80,13 +82,22 @@ public class PurchaseController implements Initializable {
         submitPurchase.setDisable(true);
         log.debug("Cancel and Submit buttons disabled");
 
+
+
         // Setting items in the purchase table view from the shopping cart
         purchaseTableView.setItems(FXCollections.observableList(shoppingCart.getAll()));
         log.debug("Purchase table view initialized with items from shopping cart");
+        FXCollections.sort(purchaseTableView.getItems(), Comparator.comparing(SoldItem::getQuantity));
 
         // Disabling product input fields initially
         disableProductField(true);
         log.debug("Product input fields disabled");
+
+        editQuantityButton.setDisable(true);
+
+        purchaseTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) ->
+                editQuantityButton.setDisable(newSelection == null)
+        );
 
         // Setting up listener for bar code field to update item details on focus loss
         this.barCodeField.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -122,6 +133,41 @@ public class PurchaseController implements Initializable {
         refreshProductList();
         log.info("New sale process ready");
     }
+
+    @FXML
+    protected void editQuantityButtonClicked() {
+        SoldItem selectedItem = purchaseTableView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            TextInputDialog dialog = new TextInputDialog(String.valueOf(selectedItem.getQuantity()));
+            dialog.setTitle("Edit Quantity");
+            dialog.setHeaderText("Editing Quantity for " + selectedItem.getName());
+            dialog.setContentText("Enter new quantity:");
+
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(quantityStr -> {
+                try {
+                    int newQuantity = Integer.parseInt(quantityStr);
+                    if (newQuantity > 0) {
+                        selectedItem.setQuantity(newQuantity);
+                        purchaseTableView.refresh();
+                    } else {
+                        showErrorMessage("Quantity must be greater than 0.");
+                    }
+                } catch (NumberFormatException e) {
+                    showErrorMessage("Invalid quantity format.");
+                }
+            });
+        }
+    }
+
+    private void showErrorMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     private void refreshProductList() {
         productNameComboBox.setItems(FXCollections.observableArrayList(
@@ -230,6 +276,7 @@ public class PurchaseController implements Initializable {
             }
             shoppingCart.addItem(new SoldItem(stockItem, quantity));
             purchaseTableView.refresh();
+            FXCollections.sort(purchaseTableView.getItems(), Comparator.comparing(SoldItem::getQuantity));
             log.info("Item added: " + stockItem.getName() + ", Quantity: " + quantity);
         } else {
             log.warn("No stock item found for the entered barcode");
