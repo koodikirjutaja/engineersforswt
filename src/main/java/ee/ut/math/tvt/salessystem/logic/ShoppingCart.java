@@ -96,4 +96,12 @@ public class ShoppingCart {
         // this would be a good place to increment the stock quantity back.
     }
 
+    public double calculateTotalSum() {
+        double totalSum = 0.0;
+        for (SoldItem item : items) {
+            totalSum += item.getPrice() * item.getQuantity();
+        }
+        return totalSum;
+    }
+
 }

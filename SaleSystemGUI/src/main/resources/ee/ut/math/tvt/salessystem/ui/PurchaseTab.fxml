@@ -77,6 +77,7 @@
             </TableView>
           </content>
         </TitledPane>
+        <Label fx:id="totalSumLabel" text="Total Sum: $" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="90.0"/>
         <Button fx:id="removeItemButton" text="Remove" onAction="#removeItemButtonClicked" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="50.0"/>
         <Button fx:id="editQuantityButton" text="Edit Quantity" onAction="#editQuantityButtonClicked" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="10.0"/>
       </AnchorPane>

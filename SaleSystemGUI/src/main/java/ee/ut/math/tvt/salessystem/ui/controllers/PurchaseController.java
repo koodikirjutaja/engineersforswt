@@ -55,6 +55,9 @@ public class PurchaseController implements Initializable {
     private Button editQuantityButton;
     @FXML
     private Button removeItemButton;
+    @FXML
+    private Label totalSumLabel;
+
     private List<SoldItem> items;
     @FXML
     private TableView<SoldItem> purchaseTableView;
@@ -81,6 +84,8 @@ public class PurchaseController implements Initializable {
                 updateProductDetails(newValue);
             }
         });
+
+        updateTotalSum();
 
         // Disabling 'cancel' and 'submit' buttons initially
         cancelPurchase.setDisable(true);
@@ -139,8 +144,15 @@ public class PurchaseController implements Initializable {
             purchaseTableView.getItems().remove(selectedItem);
             purchaseTableView.refresh();
             log.info("Item removed: " + selectedItem.getName());
+            updateTotalSum();
         }
     }
+
+    private void updateTotalSum() {
+        double totalSum = shoppingCart.calculateTotalSum();
+        totalSumLabel.setText("Total Sum: $" + String.format("%.2f", totalSum));
+    }
+
 
     public void ShoppingCart() {
         items = new ArrayList<>();
@@ -298,10 +310,12 @@ public class PurchaseController implements Initializable {
         log.info("Adding new item to cart");
         StockItem stockItem = getStockItemByBarcode();
 
+
         if (stockItem != null) {
             try {
                 int quantity = Integer.parseInt(quantityField.getText());
                 shoppingCart.addItem(new SoldItem(stockItem, quantity));
+                updateTotalSum();
                 purchaseTableView.refresh();
                 FXCollections.sort(purchaseTableView.getItems(), Comparator.comparing(SoldItem::getQuantity));
                 log.info("Item added: " + stockItem.getName() + ", Quantity: " + quantity);
