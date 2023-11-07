@@ -48,6 +48,7 @@
                            <Button onMouseClicked="#onAddItemClicked"  prefHeight="105.0" prefWidth="194.0" text="Add item" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
                         </children>
                          <Button onMouseClicked="#refreshButtonClicked" text="Refresh warehouse" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                         <Button fx:id="editItemButton" onMouseClicked="#onEditItemClicked" prefHeight="105.0" prefWidth="194.0" text="Edit item" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
                      </GridPane>
                   </children>
                </AnchorPane>
