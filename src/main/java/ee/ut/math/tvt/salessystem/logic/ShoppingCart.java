@@ -89,6 +89,11 @@ public class ShoppingCart {
         }
     }
 
-
+    public void removeItem(SoldItem item) {
+        items.remove(item);
+        // Update the stock TODO
+        // For example, if the ShoppingCart keeps track of stock quantities,
+        // this would be a good place to increment the stock quantity back.
+    }
 
 }

@@ -15,6 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -51,6 +53,9 @@ public class PurchaseController implements Initializable {
     private Button addItemButton;
     @FXML
     private Button editQuantityButton;
+    @FXML
+    private Button removeItemButton;
+    private List<SoldItem> items;
     @FXML
     private TableView<SoldItem> purchaseTableView;
 
@@ -99,6 +104,11 @@ public class PurchaseController implements Initializable {
                 editQuantityButton.setDisable(newSelection == null)
         );
 
+        removeItemButton.setDisable(true);
+        purchaseTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) ->
+                removeItemButton.setDisable(newSelection == null)
+        );
+
         // Setting up listener for bar code field to update item details on focus loss
         this.barCodeField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -119,6 +129,28 @@ public class PurchaseController implements Initializable {
             barCodeField.setText(String.valueOf(stockItem.getId()));
             priceField.setText(String.format("%.2f", stockItem.getPrice()));
         }
+    }
+
+    @FXML
+    protected void removeItemButtonClicked() {
+        SoldItem selectedItem = purchaseTableView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            shoppingCart.removeItem(selectedItem);
+            purchaseTableView.getItems().remove(selectedItem);
+            purchaseTableView.refresh();
+            log.info("Item removed: " + selectedItem.getName());
+        }
+    }
+
+    public void ShoppingCart() {
+        items = new ArrayList<>();
+    }
+
+    public void removeItem(SoldItem item) {
+        items.remove(item);
+        // TODO: Update the stock
+        // For example, if the ShoppingCart keeps track of stock quantities,
+        // this would be a good place to increment the stock quantity back.
     }
 
     /** Event handler for the <code>new purchase</code> event. */
