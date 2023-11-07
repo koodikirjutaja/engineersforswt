@@ -78,4 +78,6 @@ public interface SalesSystemDAO {
     void rollbackTransaction();
 
     void commitTransaction();
+
+    List<SoldItem> findSoldItems();
 }

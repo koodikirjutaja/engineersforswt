@@ -195,4 +195,9 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
     @Override
     public void commitTransaction() {
     }
+
+    @Override
+    public List<SoldItem> findSoldItems() {
+        return soldItemList;
+    }
 }
