@@ -3,6 +3,7 @@ import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ee.ut.math.tvt.salessystem.FieldFormatException;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 import java.sql.SQLOutput;
@@ -22,14 +23,12 @@ public void setUp(){
 }
 @Test
 public void testAddingItemBeginsAndCommitsTransaction() {
-    //TODO make mock class of InMemorySalesSystemDAO, add item to it and verify begin transaction and commit transaction work once.
     SalesSystemDAO mockdao = mock(InMemorySalesSystemDAO.class);
     doCallRealMethod().when(mockdao).addNewStockItem("asdf","asdf","1","1");
+    InOrder inOrder = inOrder(mockdao);
     mockdao.addNewStockItem("asdf","asdf","1","1");
-
-    verify(mockdao, times(1)).beginTransaction();
-    verify(mockdao, times(1)).commitTransaction();
-
+    inOrder.verify(mockdao, times(1)).beginTransaction();
+    inOrder.verify(mockdao, times(1)).commitTransaction();
 }
 @Test
     public void testAddingNewItem(){
