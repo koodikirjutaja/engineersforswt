@@ -191,18 +191,19 @@ public class PurchaseController implements Initializable {
             result.ifPresent(quantityStr -> {
                 try {
                     int newQuantity = Integer.parseInt(quantityStr);
-                    if (newQuantity > 0) {
-                        selectedItem.setQuantity(newQuantity);
-                        purchaseTableView.refresh();
-                    } else {
-                        showErrorMessage("Quantity must be greater than 0.");
+                    if (newQuantity < 0) {
+                        showErrorMessage("Quantity must be greater than or equal to 0.");
+                        return;
                     }
+                    selectedItem.setQuantity(newQuantity);
+                    purchaseTableView.refresh();
                 } catch (NumberFormatException e) {
                     showErrorMessage("Invalid quantity format.");
                 }
             });
         }
     }
+
 
     private void showErrorMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -211,6 +212,7 @@ public class PurchaseController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 
 
     private void refreshProductList() {
@@ -314,12 +316,16 @@ public class PurchaseController implements Initializable {
         if (stockItem != null) {
             try {
                 int quantity = Integer.parseInt(quantityField.getText());
+                if (quantity < 0) {
+                    showErrorMessage("Quantity must be greater than or equal to 0.");
+                    return;
+                }
                 shoppingCart.addItem(new SoldItem(stockItem, quantity));
                 updateTotalSum();
                 purchaseTableView.refresh();
                 FXCollections.sort(purchaseTableView.getItems(), Comparator.comparing(SoldItem::getQuantity));
                 log.info("Item added: " + stockItem.getName() + ", Quantity: " + quantity);
-            } catch (NumberFormatException e) {
+            }  catch (NumberFormatException e) {
                 showErrorMessage("Invalid quantity format for item " + stockItem.getName());
                 log.warn("Invalid quantity format for item " + stockItem.getName(), e);
             } catch (IllegalStateException e) {
