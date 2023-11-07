@@ -88,6 +88,17 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         }
     }
     @Override
+    public void addStockItem(StockItem item) {
+        if (item.getName().equals(""))
+            throw new FieldFormatException("Item must have a name!");
+
+        if (findStockItem(item.getId())==null)
+            stockItemList.add(item);
+        else{
+            addExistingStockItem(item, item.getName(), item.getDescription(), Double.toString(item.getPrice()), Integer.toString(item.getQuantity()));
+        }
+    }
+    @Override
     public void addExistingStockItem(StockItem stockItem,
                                      String itemName,
                                      String itemDescription,
@@ -118,6 +129,7 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
                                 String itemDescription,
                                 String itemPriceStr,
                                 String itemQuantityStr){
+        beginTransaction();
         long barCode = findStockItems().size()+1;
         checkInputFields(itemName,
                         itemDescription,
@@ -131,12 +143,13 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
             throw new FieldFormatException("Item quantity must not be negative");
         StockItem stockItem = new StockItem(barCode, itemName, itemDescription, itemPrice, itemQuantity);
         saveStockItem(stockItem);
+        commitTransaction();
     }
     @Override
     public void checkInputFields(String itemName,
-                                 String itemDescription,
-                                 String itemPriceStr,
-                                 String itemQuantityStr) {
+                                        String itemDescription,
+                                        String itemPriceStr,
+                                        String itemQuantityStr) {
         if (itemName.equals(""))
             throw new FieldFormatException("Item must have a name!");
         if (itemDescription.equals(""))

@@ -52,6 +52,8 @@ public interface SalesSystemDAO {
                       String itemPriceStr,
                       String itemQuantityStr);
 
+    void addStockItem(StockItem item);
+
     void addExistingStockItem(StockItem stockItem,
                               String itemName,
                               String itemDescription,
