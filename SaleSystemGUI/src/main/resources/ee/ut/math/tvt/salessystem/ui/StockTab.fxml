@@ -44,11 +44,14 @@
                            <TextField fx:id="itemPriceField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            <TextField fx:id="itemQuantityField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            <TextField fx:id="itemDescriptionField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                           <TextField fx:id="itemNameField" GridPane.columnIndex="1" />
-                           <Button onMouseClicked="#onAddItemClicked"  prefHeight="105.0" prefWidth="194.0" text="Add item" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                            <TextField fx:id="itemNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            <Button fx:id="addItemButton" onMouseClicked="#onAddItemClicked" text="Add item" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                            <TextField fx:id="searchField" GridPane.columnIndex="1" GridPane.rowIndex="0"  />
+                            <Button fx:id="searchButton" onMouseClicked="#onSearchButtonClicked" text="Search" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
                         </children>
-                         <Button onMouseClicked="#refreshButtonClicked" text="Refresh warehouse" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                         <Button fx:id="editItemButton" onMouseClicked="#onEditItemClicked" prefHeight="105.0" prefWidth="194.0" text="Edit item" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                         <Button onMouseClicked="#refreshButtonClicked" text="Refresh warehouse" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                         <Button fx:id="editItemButton" onMouseClicked="#onEditItemClicked" text="Edit item" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                      </GridPane>
                   </children>
                </AnchorPane>

@@ -1,11 +1,9 @@
 package ee.ut.math.tvt.salessystem.ui.controllers;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import ee.ut.math.tvt.salessystem.FieldFormatException;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -15,7 +13,9 @@ import org.apache.logging.log4j.Logger;
 
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class StockController implements Initializable {
 
@@ -38,6 +38,11 @@ public class StockController implements Initializable {
     @FXML
     private TextField itemPriceField;
     @FXML
+    private TextField searchField;
+    @FXML
+    private Button searchButton;
+
+    @FXML
     public void onAddItemClicked(){
         log.info("Started add item process");
         addItem();
@@ -52,9 +57,25 @@ public class StockController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         log.info("StockController Initializing");
+        searchField.setText(""); // Clear search field on initialize
         refreshStockItems();
         log.info("StockController Initialized");
     }
+
+
+    @FXML
+    public void onSearchButtonClicked() {
+        String searchText = searchField.getText().toLowerCase();
+        if (searchText.isEmpty()) {
+            refreshStockItems(); // Refresh list to original state if search is empty
+        } else {
+            List<StockItem> filteredItems = dao.findStockItems().stream()
+                    .filter(item -> item.getName().toLowerCase().contains(searchText))
+                    .collect(Collectors.toList());
+            warehouseTableView.setItems(FXCollections.observableList(filteredItems));
+        }
+    }
+
 
     @FXML
     public void onEditItemClicked() {
@@ -142,9 +163,7 @@ public class StockController implements Initializable {
     @FXML
     public void refreshButtonClicked() {
         log.info("Refreshing stock items.");
-        log.debug("StockController-refreshButtonClicked");
         refreshStockItems();
-        log.debug("StockController-refreshButtonClicked-refreshStockItems");
         log.info("Refreshing stock items.");
     }
 
