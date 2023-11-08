@@ -40,14 +40,29 @@ public class StockController implements Initializable {
     @FXML
     private TextField searchField;
     @FXML
+    private TextField inputField;
+    @FXML
     private Button searchButton;
 
     @FXML
-    public void onAddItemClicked(){
+    public void onAddItemClicked() {
         log.info("Started add item process");
-        addItem();
+        String itemName = inputField.getText().trim();
+        if (itemName.isEmpty()) {
+            showAlert("Input Error", "Item name is required to add an item.");
+            return;
+        }
+        addItem(itemName);
+        resetInputFields();
+
         log.info("Ended add item process");
-    };
+    }
+    private void resetInputFields() {
+        inputField.clear();
+        itemDescriptionField.clear();
+        itemPriceField.clear();
+        itemQuantityField.clear();
+    }
 
 
     public StockController(SalesSystemDAO dao) {
@@ -57,7 +72,7 @@ public class StockController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         log.info("StockController Initializing");
-        searchField.setText(""); // Clear search field on initialize
+        inputField.setText(""); // Use inputField instead of searchField
         refreshStockItems();
         log.info("StockController Initialized");
     }
@@ -65,7 +80,7 @@ public class StockController implements Initializable {
 
     @FXML
     public void onSearchButtonClicked() {
-        String searchText = searchField.getText().toLowerCase();
+        String searchText = inputField.getText().trim().toLowerCase();
         if (searchText.isEmpty()) {
             refreshStockItems(); // Refresh list to original state if search is empty
         } else {
@@ -73,6 +88,7 @@ public class StockController implements Initializable {
                     .filter(item -> item.getName().toLowerCase().contains(searchText))
                     .collect(Collectors.toList());
             warehouseTableView.setItems(FXCollections.observableList(filteredItems));
+            inputField.clear();
         }
     }
 
@@ -123,6 +139,7 @@ public class StockController implements Initializable {
             });
 
             dialog.showAndWait();
+            resetInputFields();
         }
     }
 
@@ -137,27 +154,23 @@ public class StockController implements Initializable {
 
 
 
-    public void addItem(){
+    public void addItem(String itemName) {
         log.debug("StockController-addItem");
         try {
             dao.addStockItem(
-                    itemNameField.getText(),
+                    itemName,
                     itemDescriptionField.getText(),
                     itemPriceField.getText(),
                     itemQuantityField.getText()
             );
-            log.debug("StockController-addItem-addStockItem: " +
-                    itemNameField.getText() + ", " +
-                    itemDescriptionField.getText() + ", " +
-                    itemPriceField.getText() + ", " +
-                    itemQuantityField.getText());
+            log.debug("StockController-addItem-addStockItem: " + itemName + ", " + itemDescriptionField.getText() + ", " + itemPriceField.getText() + ", " + itemQuantityField.getText());
             refreshStockItems();
-            log.debug("StockController-addItem-refreshStockItems");
         } catch (FieldFormatException e) {
             log.error("StockController-addItem-FieldFormatException: " + e.getMessage(), e);
-            // Popup message
+            showAlert("Input Error", e.getMessage());
         } catch (Exception e) {
             log.error("StockController-addItem-Exception: " + e.getMessage(), e);
+            showAlert("Error", "An error occurred: " + e.getMessage());
         }
     }
     @FXML
