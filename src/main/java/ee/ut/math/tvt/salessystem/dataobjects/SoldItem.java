@@ -7,6 +7,8 @@ package ee.ut.math.tvt.salessystem.dataobjects;
 public class SoldItem {
 
     private Long id;
+
+    private Long purchaseId;
     private StockItem stockItem;
     private String name;
     private Integer quantity;
@@ -29,6 +31,10 @@ public class SoldItem {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Long getPurchaseId(){return purchaseId;}
+
+    public void setPurchaseId(Long purchaseId){this.purchaseId = purchaseId;}
 
     public String getName() {
         return name;

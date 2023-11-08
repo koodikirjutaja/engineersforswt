@@ -1,16 +1,20 @@
 package ee.ut.math.tvt.salessystem.dao;
 
 import ee.ut.math.tvt.salessystem.FieldFormatException;
+import ee.ut.math.tvt.salessystem.dataobjects.Purchase;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class InMemorySalesSystemDAO implements SalesSystemDAO {
 
     private final List<StockItem> stockItemList;
     private final List<SoldItem> soldItemList;
+
+    private final List<Purchase> purchaseList;
 
     public InMemorySalesSystemDAO() {
         List<StockItem> items = new ArrayList<StockItem>();
@@ -20,6 +24,7 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         items.add(new StockItem(4L, "Free Beer", "Student's delight", 0.0, 100));
         this.stockItemList = items;
         this.soldItemList = new ArrayList<>();
+        this.purchaseList = new ArrayList<>();
     }
 
     @Override
@@ -200,4 +205,18 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
     public List<SoldItem> findSoldItems() {
         return soldItemList;
     }
+
+    @Override
+    public void savePurchase(Purchase purchase) {
+        purchaseList.add(purchase);
+    }
+
+    @Override
+    public List<Purchase> findPurchase() {
+        return purchaseList;
+    }
+
+
+
+
 }

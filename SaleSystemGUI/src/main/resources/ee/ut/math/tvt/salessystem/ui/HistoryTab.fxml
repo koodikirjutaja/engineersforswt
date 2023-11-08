@@ -6,18 +6,18 @@
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="10">
     <HBox spacing="10">
         <VBox spacing="10">
-            <Button text="Show between dates" prefWidth="150" style="-fx-padding: 2px 10px;" />
+            <Button text="Show between dates" prefWidth="150" style="-fx-padding: 2px 10px;" onAction="#showBetweenDatesButtonClicked" />
             <VBox>
-                <Button text="Show last 10" prefWidth="150" style="-fx-padding: 2px 10px;" />
+                <Button text="Show last 10" prefWidth="150" style="-fx-padding: 2px 10px;" onAction="#showLast10ButtonClicked" />
                 <Button text="Show all" prefWidth="150" style="-fx-padding: 2px 10px;" onAction="#showAllButtonClicked" />
             </VBox>
         </VBox>
         <Region HBox.hgrow="ALWAYS" />
         <VBox spacing="10">
             <Label text="Start date" />
-            <DatePicker />
+            <DatePicker fx:id="dpStartDate"/>
             <Label text="End date" />
-            <DatePicker />
+            <DatePicker fx:id="dpEndDate"/>
         </VBox>
     </HBox>
 
@@ -25,9 +25,9 @@
         <Label text="Purchase history" style="-fx-font-weight: bold;" />
         <TableView fx:id="purchaseHistoryTable" styleClass="history-table" >
             <columns>
-                <TableColumn text="Date" prefWidth="150" />
-                <TableColumn text="Time" prefWidth="150" />
-                <TableColumn text="Total" prefWidth="150" />
+                <TableColumn fx:id="dateColumn" text="Date" prefWidth="150" />
+                <TableColumn fx:id="timeColumn" text="Time" prefWidth="150" />
+                <TableColumn fx:id="totalColumn" text="Total" prefWidth="150" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -37,7 +37,7 @@
 
     <TableView fx:id="itemsTable" styleClass="history-table">
         <columns>
-            <TableColumn fx:id="idColumn" text="Id" prefWidth="150" />
+            <TableColumn fx:id="purchaseIdColumn" text="Id" prefWidth="150" />
             <TableColumn fx:id="nameColumn" text="Name" prefWidth="150" />
             <TableColumn fx:id="priceColumn" text="Price" prefWidth="150" />
             <TableColumn fx:id="quantityColumn" text="Quantity" prefWidth="150" />

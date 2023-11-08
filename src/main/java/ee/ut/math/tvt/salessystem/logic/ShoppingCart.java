@@ -1,15 +1,19 @@
 package ee.ut.math.tvt.salessystem.logic;
 
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
+import ee.ut.math.tvt.salessystem.dataobjects.Purchase;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingCart {
 
     private final SalesSystemDAO dao;
+
+    private Long currentPurchaseId = 0L;
     private final List<SoldItem> items = new ArrayList<>();
 
     public ShoppingCart(SalesSystemDAO dao) {
@@ -38,6 +42,7 @@ public class ShoppingCart {
         } else {
             // If the item is not in the cart, check stock availability before adding
             if (item.getQuantity() <= dao.findStockItem(item.getStockItem().getId()).getQuantity()) {
+                item.setPurchaseId(currentPurchaseId);
                 items.add(item);
             } else {
                 throw new IllegalArgumentException("Not enough stock for item: " + item.getName());
@@ -61,6 +66,8 @@ public class ShoppingCart {
         // Starting a transaction (no-op for in-memory DAO)
         dao.beginTransaction();
         try {
+            Purchase purchase = new Purchase(currentPurchaseId, LocalDateTime.now(), new ArrayList<>(items));
+
             for (SoldItem soldItem : items) {
                 // Find the corresponding stock item in the warehouse
                 StockItem stockItem = dao.findStockItem(soldItem.getStockItem().getId());
@@ -78,10 +85,13 @@ public class ShoppingCart {
                     throw new IllegalStateException("Item not found in stock: " + soldItem.getName());
                 }
             }
+            //Saving the Purchase object
+            dao.savePurchase(purchase);
             // Committing the transaction (no-op for in-memory DAO)
             dao.commitTransaction();
             // Clearing the items from the shopping cart
             items.clear();
+            currentPurchaseId++;
         } catch (Exception e) {
             // Rolling back the transaction in case of an exception (no-op for in-memory DAO)
             dao.rollbackTransaction();

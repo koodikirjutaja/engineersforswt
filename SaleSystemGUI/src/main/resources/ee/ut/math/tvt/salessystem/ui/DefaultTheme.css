@@ -845,14 +845,18 @@
     -fx-background-color: gray;
 }
 
-
-
 .history-table .table-row-cell {
-    -fx-background-color: white;
+    -fx-control-inner-background: white;
+    -fx-control-inner-background-alt: #F8F8F8;
 }
-.history-table .table-row-cell:nth-child(even) {
-    -fx-background-color: lightgray;
+
+.history-table .table-row-cell:selected,
+.history-table .table-row-cell:selected .text {
+    -fx-background-color: -fx-table-cell-border-color, -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
 }
+
+
 
 
 
