@@ -12,10 +12,13 @@ public class SoldItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "purchaseId")
+    @Column(name = "purchaseId",insertable = false,updatable = false)
     private Long purchaseId;
     @ManyToOne
-    @JoinColumn(name = "stockItemId",referencedColumnName = "id")
+    @JoinColumn(name = "purchaseId")
+    private Purchase purchase;
+    @ManyToOne
+    @JoinColumn(name = "stockItemId")
     private StockItem stockItem;
     @Column(name = "name")
     private String name;
