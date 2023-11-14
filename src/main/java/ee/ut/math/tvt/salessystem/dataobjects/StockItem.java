@@ -3,6 +3,7 @@ package ee.ut.math.tvt.salessystem.dataobjects;
 /**
  * Stock item.
  */
+
 public class StockItem {
 
     private Long id;
