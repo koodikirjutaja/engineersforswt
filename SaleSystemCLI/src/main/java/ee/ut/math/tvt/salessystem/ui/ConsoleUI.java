@@ -195,9 +195,6 @@ public class ConsoleUI {
             List<Purchase> filteredPurchases = dao.findPurchase().stream().
                     filter(purchase -> !purchase.getPurchaseTime().isBefore(startDate) && !purchase.getPurchaseTime().isAfter(endDate)).
                     collect(Collectors.toList());
-            if (filteredPurchases.isEmpty()) {
-                System.out.println("No purchases found in the specified date range.");
-            }
             endResult = filteredPurchases;
             return endResult;
 
@@ -252,9 +249,9 @@ public class ConsoleUI {
             showHistory("CLI-showHistory","Purchase history:","\tNo purchase history available.",purchases);
         } else if (c[0].equals("l"))
             showHistory("CLI-showLastTenPurchases","Last 10 Purchases:","\tNo recent purchases available",fetchLastTenPurchases());
-        else if (c[0].equals("d"))
-            showHistory("CLI-showBetweenDates","Purhcases between these dates:","No purchase history between these dates",fetchPurchasesBetweenDates());
-            else if (c[0].equals("a") && c.length == 3) {
+        else if (c[0].equals("d")) {
+            showHistory("CLI-showBetweenDates", "Purchases between these dates:", "No purchases found in the specified date range.",fetchPurchasesBetweenDates());
+        }else if (c[0].equals("a") && c.length == 3) {
             try {
                 long idx = Long.parseLong(c[1]);
                 log.debug("CLI-processCommand: ID");
