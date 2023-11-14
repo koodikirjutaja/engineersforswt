@@ -4,6 +4,7 @@ import ee.ut.math.tvt.salessystem.FieldFormatException;
 import ee.ut.math.tvt.salessystem.SalesSystemException;
 import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
+import ee.ut.math.tvt.salessystem.dataobjects.Purchase;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
@@ -14,9 +15,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Properties;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A simple CLI (limited functionality).
@@ -149,6 +152,62 @@ public class ConsoleUI {
         }
     }
 
+    private void showHistory(String logMessage, String introMessage, String exceptionMessage, List<Purchase> purchases){
+        log.debug(logMessage);
+        System.out.println("-------------------------");
+        System.out.println(introMessage);
+        for (Purchase purchase : purchases){
+            System.out.println("ID: " + purchase.getId() + ", Date: "+ purchase.getPurchaseTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            System.out.println("Items:");
+            for (SoldItem item : purchase.getItems()) {
+                System.out.println("\tName: " + item.getName() + ", Quantity: " + item.getQuantity() + ", Price: " + item.getPrice());
+            }
+            System.out.println("Total Sum: " + purchase.calculateTotalSum());
+            System.out.println("-------------------------");
+        }
+        if (purchases.isEmpty()) {
+            System.out.println(exceptionMessage);
+            System.out.println("-------------------------");
+        }
+    }
+
+    private List<Purchase> fetchLastTenPurchases() {
+        log.debug("CLI-showLastTenPurchases");
+        List<Purchase> lastTen = dao.findPurchase().stream().sorted((p1,p2) ->
+                p2.getPurchaseTime().compareTo(p1.getPurchaseTime())).limit(10).
+                collect(Collectors.toList());
+        return lastTen;
+    }
+
+    private List<Purchase> fetchPurchasesBetweenDates() {
+        List <Purchase> endResult = new ArrayList<>();
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            System.out.println("Enter start date (yyyy-MM-dd):");
+            String startDateStr = input.readLine();
+            System.out.println("Enter end date (yyyy-MM-dd):");
+            String endDateStr = input.readLine();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime startDate = LocalDateTime.parse(startDateStr + " 00:00:00", formatter);
+            LocalDateTime endDate = LocalDateTime.parse(endDateStr + " 23:59:59", formatter);
+
+            List<Purchase> filteredPurchases = dao.findPurchase().stream().
+                    filter(purchase -> !purchase.getPurchaseTime().isBefore(startDate) && !purchase.getPurchaseTime().isAfter(endDate)).
+                    collect(Collectors.toList());
+            if (filteredPurchases.isEmpty()) {
+                System.out.println("No purchases found in the specified date range.");
+            }
+            endResult = filteredPurchases;
+            return endResult;
+
+        } catch (IOException e) {
+            System.out.println("Error reading input: " + e.getMessage());
+        } catch (DateTimeParseException e){
+            System.out.println("Invalid date format:" + e.getMessage());
+        }
+        return endResult;
+    }
 
     private void printUsage() {
         log.debug("CLI-printUsage");
@@ -156,12 +215,15 @@ public class ConsoleUI {
         System.out.println("Usage:");
         System.out.println("h\t\tShow this help");
         System.out.println("w\t\tShow warehouse contents");
+        System.out.println("i\t\tShow purchase history");
+        System.out.println("l\t\tShow last 10 purchases");
+        System.out.println("d\t\tShow between dates");
+        System.out.println("t\t\tShow team info");
         System.out.println("s\t\tAdd item new item to warehouse");
         System.out.println("c\t\tShow cart contents");
         System.out.println("a IDX NR \tAdd NR of stock item with index IDX to the cart");
         System.out.println("p\t\tPurchase the shopping cart");
         System.out.println("r\t\tReset the shopping cart");
-        System.out.println("t\t\tShow team info");
         System.out.println("-------------------------");
     }
 
@@ -185,7 +247,14 @@ public class ConsoleUI {
             showTeamInfo();
         else if (c[0].equals("s"))
             addItem();
-        else if (c[0].equals("a") && c.length == 3) {
+        else if (c[0].equals("i")){
+            List<Purchase> purchases = dao.findPurchase();
+            showHistory("CLI-showHistory","Purchase history:","\tNo purchase history available.",purchases);
+        } else if (c[0].equals("l"))
+            showHistory("CLI-showLastTenPurchases","Last 10 Purchases:","\tNo recent purchases available",fetchLastTenPurchases());
+        else if (c[0].equals("d"))
+            showHistory("CLI-showBetweenDates","Purhcases between these dates:","No purchase history between these dates",fetchPurchasesBetweenDates());
+            else if (c[0].equals("a") && c.length == 3) {
             try {
                 long idx = Long.parseLong(c[1]);
                 log.debug("CLI-processCommand: ID");
