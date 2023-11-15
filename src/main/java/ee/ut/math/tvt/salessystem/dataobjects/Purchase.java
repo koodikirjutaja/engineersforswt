@@ -15,6 +15,10 @@ public class Purchase {
     @OneToMany(mappedBy = "purchase")
     private List<SoldItem> items;
 
+    public Purchase(){
+
+    }
+
     public Purchase(Long id, LocalDateTime purchaseTime, List<SoldItem> items) {
         this.id = id;
         this.purchaseTime = purchaseTime;

@@ -118,6 +118,14 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
 
     @Override
     public void savePurchase(Purchase purchase) {
+        beginTransaction();
+        try {
+            em.persist(purchase);
+            commitTransaction();
+        } catch (Exception e){
+            rollbackTransaction();
+            throw e;
+        }
 
     }
 

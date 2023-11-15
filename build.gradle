@@ -1,4 +1,7 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+    id 'application'
+}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -35,4 +38,9 @@ task dbmanager(dependsOn: 'classes', type: JavaExec) {
     main = 'org.hsqldb.util.DatabaseManagerSwing'
     classpath = sourceSets.main.runtimeClasspath
     args = ["--user", "sa", "--url", "jdbc:hsqldb:hsql://localhost/POS"]
+}
+
+application {
+    mainClassName = 'ee.ut.math.tvt.salessystem.ui.SalesSystemUI'
+    applicationDefaultJvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
 }
