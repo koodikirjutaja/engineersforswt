@@ -18,7 +18,7 @@ https://bitbucket.org/team-engineers-pos/lg11-engineers/src/master/
 https://bitbucket.org/team-engineers-pos/lg11-engineers/src/master/
 
 ## Homework 5:
-<Links to the solution>
+https://bitbucket.org/team-engineers-pos/lg11-engineers/src/master/
 
 ## Homework 6:
 <Links to the solution>
