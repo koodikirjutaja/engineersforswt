@@ -86,6 +86,10 @@ public class SoldItem {
         this.stockItem = stockItem;
     }
 
+    public void addPurchase(Purchase purchase){
+        this.purchase = purchase;
+    }
+
     @Override
     public String toString() {
         return String.format("SoldItem{id=%d, name='%s'}", id, name);

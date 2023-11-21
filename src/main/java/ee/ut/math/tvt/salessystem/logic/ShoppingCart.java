@@ -72,6 +72,7 @@ public class ShoppingCart {
             Purchase purchase = new Purchase(currentPurchaseId, LocalDateTime.now(), new ArrayList<>(items));
             for (SoldItem soldItem : items) {
                 // Find the corresponding stock item in the warehouse
+                soldItem.addPurchase(purchase);
                 StockItem stockItem = dao.findStockItem(soldItem.getStockItem().getId());
                 if (stockItem != null) {
                     // Decrease the quantity of the stock item in the warehouse
@@ -96,7 +97,7 @@ public class ShoppingCart {
             currentPurchaseId++;
         } catch (Exception e) {
             // Rolling back the transaction in case of an exception (no-op for in-memory DAO)
-           // dao.rollbackTransaction();
+           //dao.rollbackTransaction();
             throw e; // Re-throwing the exception to indicate failure
         }
     }
