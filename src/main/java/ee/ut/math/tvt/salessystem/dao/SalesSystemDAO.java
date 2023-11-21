@@ -85,4 +85,6 @@ public interface SalesSystemDAO {
     void savePurchase(Purchase purchase);
 
     List<Purchase> findPurchase();
+
 }
+

@@ -167,7 +167,7 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     @Override
     public void saveSoldItem(SoldItem item) {
         em.getTransaction().begin();
-        em.merge(item);
+        em.persist(item);
         em.getTransaction().commit();
     }
 
@@ -204,7 +204,6 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
         }
 
     }
-
     @Override
     public List<Purchase> findPurchase() {
         Query query = em.createQuery("SELECT p FROM Purchase p", Purchase.class);

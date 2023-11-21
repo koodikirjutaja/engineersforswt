@@ -5,6 +5,7 @@ import ee.ut.math.tvt.salessystem.dataobjects.Purchase;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

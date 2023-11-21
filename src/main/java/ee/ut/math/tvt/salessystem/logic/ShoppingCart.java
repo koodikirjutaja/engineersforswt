@@ -1,5 +1,6 @@
 package ee.ut.math.tvt.salessystem.logic;
 
+import ee.ut.math.tvt.salessystem.dao.HibernateSalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.Purchase;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
@@ -15,17 +16,20 @@ public class ShoppingCart {
 
     private final SalesSystemDAO dao;
 
-    private Long currentPurchaseId = 0L;
+    private Long currentPurchaseId;
     private final List<SoldItem> items = new ArrayList<>();
 
     public ShoppingCart(SalesSystemDAO dao) {
         this.dao = dao;
+        currentPurchaseId = (long) dao.findPurchase().size();
     }
 
     /**
      * Add new SoldItem to table.
      */
     public void addItem(SoldItem item) {
+
+
         // Find the item in the cart with the same ID as the item to be added
         SoldItem existingItem = items.stream()
                 .filter(i -> i.getStockItem().getId() == item.getStockItem().getId())
@@ -44,7 +48,6 @@ public class ShoppingCart {
         } else {
             // If the item is not in the cart, check stock availability before adding
             if (item.getQuantity() <= dao.findStockItem(item.getStockItem().getId()).getQuantity()) {
-                item.setPurchaseId(currentPurchaseId);
                 items.add(item);
             } else {
                 throw new IllegalArgumentException("Not enough stock for item: " + item.getName());
@@ -66,8 +69,7 @@ public class ShoppingCart {
 
     public void submitCurrentPurchase() {
         // Starting a transaction (no-op for in-memory DAO)
-
-       //dao.beginTransaction();
+        //dao.beginTransaction();
         try {
             Purchase purchase = new Purchase(currentPurchaseId, LocalDateTime.now(), new ArrayList<>(items));
             for (SoldItem soldItem : items) {
@@ -97,7 +99,7 @@ public class ShoppingCart {
             currentPurchaseId++;
         } catch (Exception e) {
             // Rolling back the transaction in case of an exception (no-op for in-memory DAO)
-           //dao.rollbackTransaction();
+            dao.rollbackTransaction();
             throw e; // Re-throwing the exception to indicate failure
         }
     }
