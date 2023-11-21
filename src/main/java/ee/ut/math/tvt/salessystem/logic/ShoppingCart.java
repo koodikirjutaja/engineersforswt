@@ -4,7 +4,9 @@ import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.Purchase;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
+import org.hibernate.Session;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,10 +66,10 @@ public class ShoppingCart {
 
     public void submitCurrentPurchase() {
         // Starting a transaction (no-op for in-memory DAO)
-        dao.beginTransaction();
+
+       //dao.beginTransaction();
         try {
             Purchase purchase = new Purchase(currentPurchaseId, LocalDateTime.now(), new ArrayList<>(items));
-
             for (SoldItem soldItem : items) {
                 // Find the corresponding stock item in the warehouse
                 StockItem stockItem = dao.findStockItem(soldItem.getStockItem().getId());
@@ -88,13 +90,13 @@ public class ShoppingCart {
             //Saving the Purchase object
             dao.savePurchase(purchase);
             // Committing the transaction (no-op for in-memory DAO)
-            dao.commitTransaction();
+            //dao.commitTransaction();
             // Clearing the items from the shopping cart
             items.clear();
             currentPurchaseId++;
         } catch (Exception e) {
             // Rolling back the transaction in case of an exception (no-op for in-memory DAO)
-            dao.rollbackTransaction();
+           // dao.rollbackTransaction();
             throw e; // Re-throwing the exception to indicate failure
         }
     }

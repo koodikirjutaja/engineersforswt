@@ -51,7 +51,7 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     @Override
     public void saveStockItem(StockItem stockItem) {
         em.getTransaction().begin();
-        em.persist(stockItem);
+        em.merge(stockItem);
         em.getTransaction().commit();
     }
 
@@ -93,7 +93,7 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     @Override
     public void addStockItem(StockItem item) {
         em.getTransaction().begin();
-        em.persist(item);
+        em.merge(item);
         em.getTransaction().commit();
     }
 
@@ -167,7 +167,7 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     @Override
     public void saveSoldItem(SoldItem item) {
         em.getTransaction().begin();
-        em.persist(item);
+        em.merge(item);
         em.getTransaction().commit();
     }
 
@@ -196,7 +196,7 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     public void savePurchase(Purchase purchase) {
         beginTransaction();
         try {
-            em.persist(purchase);
+            em.merge(purchase);
             commitTransaction();
         } catch (Exception e) {
             rollbackTransaction();

@@ -149,6 +149,7 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         StockItem stockItem = new StockItem(barCode, itemName, itemDescription, itemPrice, itemQuantity);
         saveStockItem(stockItem);
         commitTransaction();
+
     }
     @Override
     public void checkInputFields(String itemName,
