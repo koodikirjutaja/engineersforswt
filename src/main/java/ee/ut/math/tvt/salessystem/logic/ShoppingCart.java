@@ -72,7 +72,8 @@ public class ShoppingCart {
         //dao.beginTransaction();
         try {
             Purchase purchase = new Purchase(currentPurchaseId, LocalDateTime.now(), new ArrayList<>(items));
-            for (SoldItem soldItem : items) {
+            dao.savePurchase(purchase);
+            for (SoldItem soldItem : purchase.getItems()) {
                 // Find the corresponding stock item in the warehouse
                 soldItem.addPurchase(purchase);
                 StockItem stockItem = dao.findStockItem(soldItem.getStockItem().getId());
