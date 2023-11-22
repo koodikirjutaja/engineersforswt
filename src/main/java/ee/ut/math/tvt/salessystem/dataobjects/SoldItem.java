@@ -88,6 +88,7 @@ public class SoldItem {
 
     public void addPurchase(Purchase purchase){
         this.purchase = purchase;
+        this.purchaseId = purchase.getId();
     }
 
     @Override
