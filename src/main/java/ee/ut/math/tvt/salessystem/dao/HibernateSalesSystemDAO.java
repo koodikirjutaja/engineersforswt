@@ -197,6 +197,25 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
         beginTransaction();
         try {
             em.merge(purchase);
+            for (SoldItem soldItem : purchase.getItems()) {
+                // Find the corresponding stock item in the warehouse
+                soldItem.addPurchase(purchase);
+                StockItem stockItem = findStockItem(soldItem.getStockItem().getId());
+                if (stockItem != null) {
+                    // Decrease the quantity of the stock item in the warehouse
+                    int newQuantity = stockItem.getQuantity() - soldItem.getQuantity();
+                    if (newQuantity >= 0) {
+                        stockItem.setQuantity(newQuantity);
+                        em.merge(stockItem);
+                        // Save the sold item
+                        em.merge(soldItem);
+                    } else {
+                        throw new IllegalStateException("Insufficient stock for item: " + soldItem.getName());
+                    }
+                } else {
+                    throw new IllegalStateException("Item not found in stock: " + soldItem.getName());
+                }
+            }
             commitTransaction();
         } catch (Exception e) {
             rollbackTransaction();
