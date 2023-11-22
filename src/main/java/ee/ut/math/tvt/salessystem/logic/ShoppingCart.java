@@ -72,25 +72,7 @@ public class ShoppingCart {
         //dao.beginTransaction();
         try {
             Purchase purchase = new Purchase(currentPurchaseId, LocalDateTime.now(), new ArrayList<>(items));
-            dao.savePurchase(purchase);
-            for (SoldItem soldItem : purchase.getItems()) {
-                // Find the corresponding stock item in the warehouse
-                soldItem.addPurchase(purchase);
-                StockItem stockItem = dao.findStockItem(soldItem.getStockItem().getId());
-                if (stockItem != null) {
-                    // Decrease the quantity of the stock item in the warehouse
-                    int newQuantity = stockItem.getQuantity() - soldItem.getQuantity();
-                    if (newQuantity >= 0) {
-                        dao.setStockItem(stockItem.getId(), stockItem.getName(), stockItem.getDescription(), stockItem.getPrice(), newQuantity);
-                        // Save the sold item
-                        dao.saveSoldItem(soldItem);
-                    } else {
-                        throw new IllegalStateException("Insufficient stock for item: " + soldItem.getName());
-                    }
-                } else {
-                    throw new IllegalStateException("Item not found in stock: " + soldItem.getName());
-                }
-            }
+
             //Saving the Purchase object
             dao.savePurchase(purchase);
             // Committing the transaction (no-op for in-memory DAO)
