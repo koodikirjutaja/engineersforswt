@@ -167,7 +167,7 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     @Override
     public void saveSoldItem(SoldItem item) {
         em.getTransaction().begin();
-        em.persist(item);
+        em.merge(item);
         em.getTransaction().commit();
     }
 
