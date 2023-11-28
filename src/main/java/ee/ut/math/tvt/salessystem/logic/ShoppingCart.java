@@ -6,8 +6,6 @@ import ee.ut.math.tvt.salessystem.dataobjects.Purchase;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import org.hibernate.Session;
-
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,24 +66,36 @@ public class ShoppingCart {
     }
 
     public void submitCurrentPurchase() {
-        // Starting a transaction (no-op for in-memory DAO)
-        //dao.beginTransaction();
         try {
             Purchase purchase = new Purchase(currentPurchaseId, LocalDateTime.now(), new ArrayList<>(items));
 
-            //Saving the Purchase object
+            // Business logic for updating stock and associating purchase with sold items
+            for (SoldItem soldItem : purchase.getItems()) {
+                soldItem.addPurchase(purchase);
+                StockItem stockItem = dao.findStockItem(soldItem.getStockItem().getId());
+                if (stockItem != null) {
+                    int newQuantity = stockItem.getQuantity() - soldItem.getQuantity();
+                    if (newQuantity >= 0) {
+                        stockItem.setQuantity(newQuantity);
+                    } else {
+                        throw new IllegalStateException("Insufficient stock for item: " + soldItem.getName());
+                    }
+                } else {
+                    throw new IllegalStateException("Item not found in stock: " + soldItem.getName());
+                }
+            }
+
+            // Saving the Purchase object (with updated stock)
             dao.savePurchase(purchase);
-            // Committing the transaction (no-op for in-memory DAO)
-            //dao.commitTransaction();
+
             // Clearing the items from the shopping cart
             items.clear();
             currentPurchaseId++;
         } catch (Exception e) {
-            // Rolling back the transaction in case of an exception (no-op for in-memory DAO)
-            dao.rollbackTransaction();
             throw e; // Re-throwing the exception to indicate failure
         }
     }
+
 
     public void removeItem(SoldItem item) {
         items.remove(item);
